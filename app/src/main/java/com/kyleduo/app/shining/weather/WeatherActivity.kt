@@ -3,33 +3,42 @@ package com.kyleduo.app.shining.weather
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import com.kyleduo.app.shining.R
-import com.kyleduo.app.shining.api.WeatherApi
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.launch
 
 class WeatherActivity : AppCompatActivity() {
 
-    val viewModel: WeatherViewModel by viewModels()
-    lateinit var adapter: WeatherPageAdapter
+    private val viewModel: WeatherViewModel by viewModels()
+    private lateinit var adapter: WeatherPageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        adapter = WeatherPageAdapter()
+        adapter = WeatherPageAdapter(this)
         weather_pager.adapter = adapter
 
-        lifecycleScope.launch {
-            try {
-                val weather = WeatherApi.service.queryWeather("101010100") ?: return@launch
-                adapter.data = listOf(weather, weather)
-                adapter.notifyDataSetChanged()
-            } catch (e: Exception) {
-                e.printStackTrace()
+
+        viewModel.cities.observe(this, Observer {
+            if (it == null) {
+                return@Observer
             }
-        }
+            adapter.cities = it
+        })
+
+
+        viewModel.reload()
+
+//        lifecycleScope.launch {
+//            try {
+//                val weather = WeatherApi.service.queryWeather("101010100") ?: return@launch
+//                adapter.cities = listOf(weather, weather)
+//                adapter.notifyDataSetChanged()
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
 
 //        viewModel.cities.observe(this, Observer {
 //            if (it == null) {
