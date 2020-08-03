@@ -4,12 +4,27 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.kyleduo.app.shining.R
+import com.kyleduo.app.shining.ShiningApp
+import com.kyleduo.app.shining.repos.FavoriteCityRepository
 import kotlinx.android.synthetic.main.activity_main.*
 
 class WeatherActivity : AppCompatActivity() {
 
-    private val viewModel: WeatherViewModel by viewModels()
+    @Suppress("UNCHECKED_CAST")
+    private val viewModel: WeatherViewModel by viewModels(factoryProducer = {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T = WeatherViewModel(
+                FavoriteCityRepository(
+                    ShiningApp.app,
+                    ShiningApp.app.gson,
+                    ShiningApp.app.spDataStore
+                )
+            ) as T
+        }
+    })
     private lateinit var adapter: WeatherPageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +34,6 @@ class WeatherActivity : AppCompatActivity() {
         adapter = WeatherPageAdapter(this)
         weather_pager.adapter = adapter
 
-
         viewModel.cities.observe(this, Observer {
             if (it == null) {
                 return@Observer
@@ -27,42 +41,6 @@ class WeatherActivity : AppCompatActivity() {
             adapter.cities = it
         })
 
-
         viewModel.reload()
-
-//        lifecycleScope.launch {
-//            try {
-//                val weather = WeatherApi.service.queryWeather("101010100") ?: return@launch
-//                adapter.cities = listOf(weather, weather)
-//                adapter.notifyDataSetChanged()
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-
-//        viewModel.cities.observe(this, Observer {
-//            if (it == null) {
-//                return@Observer
-//            }
-//            val ret = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-//                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-//                    return data[oldItemPosition] == it[newItemPosition]
-//                }
-//
-//                override fun getOldListSize(): Int = data.size
-//
-//                override fun getNewListSize(): Int = it.size
-//
-//                override fun areContentsTheSame(
-//                        oldItemPosition: Int,
-//                        newItemPosition: Int
-//                ): Boolean {
-//                    return data[oldItemPosition] == it[newItemPosition]
-//                }
-//
-//            })
-//            ret.dispatchUpdatesTo(this)
-//        })
-
     }
 }

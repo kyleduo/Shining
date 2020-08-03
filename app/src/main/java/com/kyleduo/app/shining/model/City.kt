@@ -35,5 +35,9 @@ data class City(
         override fun newArray(size: Int): Array<City?> {
             return arrayOfNulls(size)
         }
+
+        fun defaultCity(): City {
+            return City("", "当前", "")
+        }
     }
 }
