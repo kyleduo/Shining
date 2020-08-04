@@ -4,8 +4,9 @@ import com.kyleduo.app.shining.api.WeatherApi
 import com.kyleduo.app.shining.datastore.MemCache
 import com.kyleduo.app.shining.model.Weather
 import java.util.*
+import javax.inject.Inject
 
-class WeatherRepository(
+class WeatherRepository @Inject constructor(
     private val weatherService: WeatherApi.WeatherService,
     private val cache: MemCache
 ) {

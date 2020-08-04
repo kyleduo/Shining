@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 def CONF_API_APP_ID = "api.appId"
 def CONF_API_APP_SECRET = "api.appSecret"
@@ -54,7 +55,9 @@ ext {
     coroutines_version = "1.3.8"
     lifecycle_version = "2.2.0"
     activity_version = "1.1.0"
-    fragment_version = "1.2.0"
+    fragment_version = "1.2.5"
+    hilt_version = "2.28-alpha"
+    hilt_lifecycle_version = "1.0.0-alpha02"
 }
 
 dependencies {
@@ -85,4 +88,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 //    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+    // hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_lifecycle_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_lifecycle_version"
 }

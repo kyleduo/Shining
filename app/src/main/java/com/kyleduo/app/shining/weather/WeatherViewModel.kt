@@ -1,5 +1,6 @@
 package com.kyleduo.app.shining.weather
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,9 @@ import kotlinx.coroutines.launch
 /**
  * @author zhangduo on 2020/8/3
  */
-class WeatherViewModel(private val repo: IFavoriteCityRepository) : ViewModel() {
+class WeatherViewModel @ViewModelInject constructor(
+    private val repo: IFavoriteCityRepository
+) : ViewModel() {
     private val _cities = MutableLiveData<List<City>>()
     val cities: LiveData<List<City>> = _cities
 
