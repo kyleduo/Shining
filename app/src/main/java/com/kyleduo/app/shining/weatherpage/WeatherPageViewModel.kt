@@ -8,9 +8,10 @@ import com.kyleduo.app.shining.model.City
 import com.kyleduo.app.shining.model.Weather
 import com.kyleduo.app.shining.repos.WeatherRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WeatherPageViewModel(
-    private val city: City,
+class WeatherPageViewModel @Inject constructor(
+    private var city: City,
     private val repo: WeatherRepository
 ) : ViewModel() {
 

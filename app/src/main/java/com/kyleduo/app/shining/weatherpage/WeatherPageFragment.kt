@@ -1,22 +1,21 @@
 package com.kyleduo.app.shining.weatherpage
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.kyleduo.app.shining.R
 import com.kyleduo.app.shining.ShiningApp
-import com.kyleduo.app.shining.api.WeatherApi
 import com.kyleduo.app.shining.api.iconResForWeather
 import com.kyleduo.app.shining.model.City
 import com.kyleduo.app.shining.model.Weather
-import com.kyleduo.app.shining.repos.WeatherRepository
 import com.kyleduo.app.shining.utils.DateUtils
 import kotlinx.android.synthetic.main.fragment_weather_page.*
+import javax.inject.Inject
 
 class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
 
@@ -34,23 +33,16 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
         }
     }
 
-    lateinit var city: City
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Suppress("UNCHECKED_CAST")
-    private val viewModel: WeatherPageViewModel by viewModels(factoryProducer = {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return WeatherPageViewModel(
-                    city,
-                    WeatherRepository(WeatherApi.service, ShiningApp.app.cache)
-                ) as T
-            }
-        }
-    })
+    private val viewModel: WeatherPageViewModel by viewModels { viewModelFactory }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        city = arguments?.getParcelable(ARG_CITY) ?: return
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity().application as ShiningApp).appComponent.weatherPageComponent()
+            .create(arguments?.getParcelable(ARG_CITY) ?: return).inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

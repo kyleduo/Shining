@@ -5,6 +5,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kyleduo.app.shining.datastore.MemCache
 import com.kyleduo.app.shining.datastore.SPDataStore
+import com.kyleduo.app.shining.di.AppComponent
+import com.kyleduo.app.shining.di.DaggerAppComponent
 import com.kyleduo.app.shining.utils.StringNullToEmptyAdapterFactory
 
 /**
@@ -18,6 +20,10 @@ class ShiningApp : Application() {
             .create()
     }
     val cache: MemCache by lazy { MemCache() }
+
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.factory().create(this)
+    }
 
     companion object {
         lateinit var app: ShiningApp

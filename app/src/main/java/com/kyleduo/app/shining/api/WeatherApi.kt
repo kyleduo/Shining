@@ -17,9 +17,7 @@ object WeatherApi {
     private const val Q_APP_SECRET = "appsecret"
     private const val BASE_URL = "https://tianqiapi.com/"
 
-    val service: WeatherService = createService()
-
-    private fun createService(): WeatherService {
+    fun createService(): WeatherService {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor {
                 val origin = it.request()
