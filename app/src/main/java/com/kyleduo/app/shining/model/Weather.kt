@@ -9,21 +9,29 @@ import java.util.*
  */
 data class Weather(
     @SerializedName("cityid")
-    val cityId: String = "",
+    val cityId: String? = "--",
     @SerializedName("date")
-    val date: String = "",
+    val date: String? = "--",
     @SerializedName("week")
-    val week: String = "",
+    val week: String? = "--",
     @SerializedName("wea")
-    val weather: String,
+    val weather: String? = "--",
     @SerializedName("wea_img")
-    val weatherImg: String,
+    val weatherImg: String? = "--",
     @SerializedName("tem")
-    val tempRealtime: String,
+    val tempRealtime: String? = "--",
     @SerializedName("tem1")
-    val tempHigh: String,
+    val tempHigh: String? = "--",
     @SerializedName("tem2")
-    val tempLow: String,
+    val tempLow: String? = "--",
+    @SerializedName("win")
+    val wind: String? = "--",
+    @SerializedName("win_speed")
+    val windSpeed: String? = "--",
+    @SerializedName("air_level")
+    val airLevel: String? = "--",
+    @SerializedName("air_pm25")
+    val airPM25: String? = "--",
     @Expose(deserialize = false, serialize = false)
     var updateTime: Date?
 )

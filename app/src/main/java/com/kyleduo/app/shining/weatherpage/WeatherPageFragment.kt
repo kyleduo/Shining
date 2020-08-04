@@ -1,5 +1,6 @@
 package com.kyleduo.app.shining.weatherpage
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import com.kyleduo.app.shining.ShiningApp
 import com.kyleduo.app.shining.api.WeatherApi
 import com.kyleduo.app.shining.api.iconResForWeather
 import com.kyleduo.app.shining.model.City
+import com.kyleduo.app.shining.model.Weather
 import com.kyleduo.app.shining.repos.WeatherRepository
 import com.kyleduo.app.shining.utils.DateUtils
 import kotlinx.android.synthetic.main.fragment_weather_page.*
@@ -20,6 +22,7 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
 
     companion object {
         const val ARG_CITY = "city"
+        const val PLACEHOLDER = "--"
 
         fun newInstance(city: City): WeatherPageFragment {
             val args = Bundle()
@@ -55,11 +58,7 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
 
         viewModel.weather.observe(viewLifecycleOwner, Observer {
             println(it.toString())
-            weather_page_curr_temp.text = it.tempRealtime
-            weather_page_update_time.text =
-                getString(R.string.weather_update_time, DateUtils.formatQualified(it.updateTime))
-            weather_page_icon.setImageResource(iconResForWeather(it.weatherImg))
-            weather_page_desc.text = it.weather
+            updateWeather(it)
         })
     }
 
@@ -67,5 +66,27 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.refresh()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateWeather(weather: Weather) {
+        fun String?.safe(): String {
+            if (this.isNullOrEmpty()) {
+                return PLACEHOLDER
+            }
+            return this
+        }
+
+        weather_page_curr_temp.text = weather.tempRealtime.safe()
+        weather_page_update_time.text =
+            getString(R.string.weather_update_time, DateUtils.formatQualified(weather.updateTime))
+        weather_page_icon.setImageResource(iconResForWeather(weather.weatherImg ?: ""))
+        weather_page_desc.text = weather.weather
+
+        weather_page_detail_value_temp_high.text = weather.tempHigh.safe()
+        weather_page_detail_value_wind.text =
+            "${weather.wind.safe()} ${weather.windSpeed.safe()}"
+        weather_page_detail_value_air_quality.text = weather.airLevel.safe()
+        weather_page_detail_value_pm_2_5.text = weather.airPM25.safe()
     }
 }
