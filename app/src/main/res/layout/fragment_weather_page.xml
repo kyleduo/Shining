@@ -18,17 +18,23 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@string/weather_update_time" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/weather_page_temp_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.18" />
+
     <TextView
         android:id="@+id/weather_page_curr_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
         android:textColor="@color/text_headline"
         android:textSize="96sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/weather_page_temp_guideline"
         tools:text="35" />
 
     <TextView
@@ -64,5 +70,85 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/weather_page_icon"
         tools:text="晴" />
+
+    <LinearLayout
+        android:id="@+id/weather_page_weather_detail_key_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginBottom="60dp"
+        android:gravity="end"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/weather_page_update_time"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/weather_page_detail_key_temp_high"
+            style="@style/Text.WeatherDetail.Key"
+            android:text="@string/temp_high" />
+
+        <TextView
+            android:id="@+id/weather_page_detail_key_temp_low"
+            style="@style/Text.WeatherDetail.Key"
+            android:text="@string/temp_low" />
+
+        <TextView
+            android:id="@+id/weather_page_detail_key_wind"
+            style="@style/Text.WeatherDetail.Key"
+            android:text="@string/wind" />
+
+        <TextView
+            android:id="@+id/weather_page_detail_key_air_quality"
+            style="@style/Text.WeatherDetail.Key"
+            android:text="@string/air_quality" />
+
+        <TextView
+            android:id="@+id/weather_page_detail_key_pm_2_5"
+            style="@style/Text.WeatherDetail.Key"
+            android:text="@string/pm_2_5" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/weather_page_detail_align_ref"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@id/weather_page_weather_detail_key_container"
+        app:layout_constraintTop_toTopOf="@id/weather_page_weather_detail_key_container" />
+
+    <LinearLayout
+        android:id="@+id/weather_page_weather_detail_value_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@id/weather_page_detail_align_ref"
+        app:layout_constraintTop_toTopOf="@id/weather_page_weather_detail_key_container">
+
+        <TextView
+            android:id="@+id/weather_page_detail_value_temp_high"
+            style="@style/Text.WeatherDetail.Value"
+            tools:text="36" />
+
+        <TextView
+            android:id="@+id/weather_page_detail_value_temp_low"
+            style="@style/Text.WeatherDetail.Value"
+            tools:text="36" />
+
+        <TextView
+            android:id="@+id/weather_page_detail_value_wind"
+            style="@style/Text.WeatherDetail.Value"
+            tools:text="36" />
+
+        <TextView
+            android:id="@+id/weather_page_detail_value_air_quality"
+            style="@style/Text.WeatherDetail.Value"
+            tools:text="36" />
+
+        <TextView
+            android:id="@+id/weather_page_detail_value_pm_2_5"
+            style="@style/Text.WeatherDetail.Value"
+            tools:text="36" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

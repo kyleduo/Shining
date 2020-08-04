@@ -2,4 +2,9 @@
     <string name="app_name">Shining</string>
     <string name="temp_unit">°</string>
     <string name="weather_update_time">更新时间：%s</string>
+    <string name="temp_high">最高</string>
+    <string name="temp_low">最低</string>
+    <string name="wind">风</string>
+    <string name="air_quality">空气质量</string>
+    <string name="pm_2_5">PM 2.5</string>
 </resources>

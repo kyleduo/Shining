@@ -8,4 +8,32 @@
         <item name="android:windowBackground">@color/general_bg</item>
     </style>
 
+    <style name="AppTheme.Compat">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="Text" />
+
+    <style name="Text.WeatherDetail">
+        <item name="android:layout_marginTop">2dp</item>
+    </style>
+
+    <style name="Text.WeatherDetail.Key">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_hint</item>
+    </style>
+
+    <style name="Text.WeatherDetail.Value">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_headline</item>
+        <item name="android:text">--</item>
+    </style>
+
+
 </resources>
