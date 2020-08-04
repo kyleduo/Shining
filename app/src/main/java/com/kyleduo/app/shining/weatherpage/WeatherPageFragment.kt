@@ -10,8 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.kyleduo.app.shining.R
 import com.kyleduo.app.shining.ShiningApp
 import com.kyleduo.app.shining.api.WeatherApi
+import com.kyleduo.app.shining.api.iconResForWeather
 import com.kyleduo.app.shining.model.City
 import com.kyleduo.app.shining.repos.WeatherRepository
+import com.kyleduo.app.shining.utils.DateUtils
 import kotlinx.android.synthetic.main.fragment_weather_page.*
 
 class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
@@ -52,7 +54,12 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.weather.observe(viewLifecycleOwner, Observer {
-            tv_weather_detail.text = it.toString()
+            println(it.toString())
+            weather_page_curr_temp.text = it.tempRealtime
+            weather_page_update_time.text =
+                getString(R.string.weather_update_time, DateUtils.formatQualified(it.updateTime))
+            weather_page_icon.setImageResource(iconResForWeather(it.weatherImg))
+            weather_page_desc.text = it.weather
         })
     }
 

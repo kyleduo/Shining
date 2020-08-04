@@ -13,13 +13,13 @@ class FavoriteCityRepository(
     private val app: Application,
     private val gson: Gson,
     private val sp: SPDataStore
-) {
+) : IFavoriteCityRepository {
     companion object {
         const val KEY_FAVORITE_CITIES = "favorite_cities"
         const val NAME = "preferences"
     }
 
-    suspend fun loadSelectedCities(): List<City> {
+    override suspend fun loadSelectedCities(): List<City> {
         return withContext(Dispatchers.IO) {
             return@withContext innerLoad()
         }

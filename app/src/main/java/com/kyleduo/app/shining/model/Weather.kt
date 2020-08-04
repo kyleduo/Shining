@@ -1,6 +1,8 @@
 package com.kyleduo.app.shining.model
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 /**
  * @author zhangduo on 2020/8/3
@@ -21,5 +23,7 @@ data class Weather(
     @SerializedName("tem1")
     val tempHigh: String,
     @SerializedName("tem2")
-    val tempLow: String
+    val tempLow: String,
+    @Expose(deserialize = false, serialize = false)
+    var updateTime: Date?
 )

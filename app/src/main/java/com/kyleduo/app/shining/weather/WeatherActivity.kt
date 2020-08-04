@@ -7,8 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.kyleduo.app.shining.R
-import com.kyleduo.app.shining.ShiningApp
-import com.kyleduo.app.shining.repos.FavoriteCityRepository
+import com.kyleduo.app.shining.mock.MockFavoriteCityRepository
 import kotlinx.android.synthetic.main.activity_main.*
 
 class WeatherActivity : AppCompatActivity() {
@@ -17,11 +16,12 @@ class WeatherActivity : AppCompatActivity() {
     private val viewModel: WeatherViewModel by viewModels(factoryProducer = {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T = WeatherViewModel(
-                FavoriteCityRepository(
-                    ShiningApp.app,
-                    ShiningApp.app.gson,
-                    ShiningApp.app.spDataStore
-                )
+//                FavoriteCityRepository(
+//                    ShiningApp.app,
+//                    ShiningApp.app.gson,
+//                    ShiningApp.app.spDataStore
+//                )
+                MockFavoriteCityRepository()
             ) as T
         }
     })

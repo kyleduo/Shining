@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Shining</string>
+    <string name="temp_unit">°</string>
+    <string name="weather_update_time">更新时间：%s</string>
 </resources>
