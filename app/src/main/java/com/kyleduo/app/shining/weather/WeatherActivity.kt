@@ -47,6 +47,10 @@ class WeatherActivity : AppCompatActivity() {
             updateCityName(weather_pager.currentItem)
             adapter.cities = it
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         viewModel.reload()
     }
