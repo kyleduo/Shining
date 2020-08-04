@@ -7,11 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.kyleduo.app.shining.model.City
 import com.kyleduo.app.shining.repos.IFavoriteCityRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * @author zhangduo on 2020/8/3
  */
-class WeatherViewModel(private val repo: IFavoriteCityRepository) : ViewModel() {
+class WeatherViewModel @Inject constructor(private val repo: IFavoriteCityRepository) :
+    ViewModel() {
     private val _cities = MutableLiveData<List<City>>()
     val cities: LiveData<List<City>> = _cities
 

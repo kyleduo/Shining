@@ -2,8 +2,9 @@ package com.kyleduo.app.shining.mock
 
 import com.kyleduo.app.shining.model.City
 import com.kyleduo.app.shining.repos.IFavoriteCityRepository
+import javax.inject.Inject
 
-class MockFavoriteCityRepository : IFavoriteCityRepository {
+class MockFavoriteCityRepository @Inject constructor() : IFavoriteCityRepository {
     override suspend fun loadSelectedCities(): List<City> {
         return listOf(
             City(id = "101010100", name = "北京", pinyin = "beijing"),

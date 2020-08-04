@@ -1,6 +1,7 @@
 package com.kyleduo.app.shining.di
 
 import android.content.Context
+import com.kyleduo.app.shining.weather.di.WeatherComponent
 import com.kyleduo.app.shining.weatherpage.di.WeatherPageComponent
 import dagger.BindsInstance
 import dagger.Component
@@ -11,7 +12,8 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AppModule::class,
-//        SubComponentModule::class,
+        AppBindsModule::class,
+        SubComponentModule::class,
         ViewModelFactoryModule::class
     ]
 )
@@ -23,10 +25,12 @@ interface AppComponent {
     }
 
     fun weatherPageComponent(): WeatherPageComponent.Factory
+    fun weatherComponent(): WeatherComponent.Factory
 }
 
 @Module(
     subcomponents = [
+        WeatherComponent::class,
         WeatherPageComponent::class
     ]
 )

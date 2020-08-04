@@ -4,32 +4,28 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.kyleduo.app.shining.R
-import com.kyleduo.app.shining.mock.MockFavoriteCityRepository
+import com.kyleduo.app.shining.ShiningApp
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 class WeatherActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var factory: ViewModelProvider.Factory
+
     @Suppress("UNCHECKED_CAST")
-    private val viewModel: WeatherViewModel by viewModels(factoryProducer = {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T = WeatherViewModel(
-//                FavoriteCityRepository(
-//                    ShiningApp.app,
-//                    ShiningApp.app.gson,
-//                    ShiningApp.app.spDataStore
-//                )
-                MockFavoriteCityRepository()
-            ) as T
-        }
-    })
+    private val viewModel: WeatherViewModel by viewModels { factory }
     private lateinit var adapter: WeatherPageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // inject dependencies
+        (application as ShiningApp).appComponent.weatherComponent().create().inject(this)
+
         setContentView(R.layout.activity_main)
 
         adapter = WeatherPageAdapter(this)
