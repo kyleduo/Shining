@@ -8,7 +8,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.kyleduo.app.shining.R
+import com.kyleduo.app.shining.ShiningApp
+import com.kyleduo.app.shining.api.WeatherApi
 import com.kyleduo.app.shining.model.City
+import com.kyleduo.app.shining.repos.WeatherRepository
 import kotlinx.android.synthetic.main.fragment_weather_page.*
 
 class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
@@ -32,7 +35,10 @@ class WeatherPageFragment : Fragment(R.layout.fragment_weather_page) {
     private val viewModel: WeatherPageViewModel by viewModels(factoryProducer = {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return WeatherPageViewModel(city) as T
+                return WeatherPageViewModel(
+                    city,
+                    WeatherRepository(WeatherApi.service, ShiningApp.app.cache)
+                ) as T
             }
         }
     })
