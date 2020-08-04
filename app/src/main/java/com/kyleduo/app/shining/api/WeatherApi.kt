@@ -13,6 +13,10 @@ import retrofit2.http.Query
  */
 object WeatherApi {
 
+    private const val Q_APP_ID = "appid"
+    private const val Q_APP_SECRET = "appsecret"
+    private const val BASE_URL = "https://tianqiapi.com/"
+
     val service: WeatherService = createService()
 
     private fun createService(): WeatherService {
@@ -20,8 +24,8 @@ object WeatherApi {
             .addInterceptor {
                 val origin = it.request()
                 val newUrl =
-                    origin.url().newBuilder().setQueryParameter("appid", BuildConfig.API_APP_ID)
-                        .setQueryParameter("appsecret", BuildConfig.API_APP_SECRET).build()
+                    origin.url().newBuilder().setQueryParameter(Q_APP_ID, BuildConfig.API_APP_ID)
+                        .setQueryParameter(Q_APP_SECRET, BuildConfig.API_APP_SECRET).build()
                 val newRequest = origin.newBuilder().url(newUrl).build()
                 it.proceed(newRequest)
             }
@@ -29,7 +33,7 @@ object WeatherApi {
 
         val retrofit: Retrofit = Retrofit.Builder()
             .client(httpClient)
-            .baseUrl("https://tianqiapi.com/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
