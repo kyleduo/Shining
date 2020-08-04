@@ -34,4 +34,4 @@ interface AppComponent {
         WeatherPageComponent::class
     ]
 )
-class SubComponentModule
+object SubComponentModule
