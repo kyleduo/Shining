@@ -1,5 +1,6 @@
 package com.kyleduo.app.shining.repos
 
+import com.google.common.truth.Truth.assertThat
 import com.kyleduo.app.shining.api.WeatherApi
 import com.kyleduo.app.shining.datastore.MemCache
 import com.kyleduo.app.shining.model.Weather
@@ -10,7 +11,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.util.*
@@ -66,6 +66,6 @@ internal class WeatherRepositoryTest {
 
         val ret = weatherRepository.queryWeather("1")
 
-        Assert.assertTrue(weather === ret)
+        assertThat(ret).isSameInstanceAs(weather)
     }
 }
