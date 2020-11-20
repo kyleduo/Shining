@@ -36,6 +36,6 @@ class WeatherRepositoryTest : StringSpec({
         val ret = weatherRepository.queryWeather("1")
 
         coVerify(exactly = 0) { weatherService.queryWeather("1") }
-        weather.shouldBeSameInstanceAs(ret)
+        ret shouldBeSameInstanceAs weather
     }
 })
