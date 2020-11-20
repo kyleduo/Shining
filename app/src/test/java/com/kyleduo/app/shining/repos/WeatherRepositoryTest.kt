@@ -6,13 +6,11 @@ import com.kyleduo.app.shining.model.Weather
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
 
 /**
  * @author zhangduo on 2020/11/17
  */
-@ExperimentalCoroutinesApi
 class WeatherRepositoryTest : StringSpec({
 
     val weatherService: WeatherApi.WeatherService = mockk(relaxed = true)
