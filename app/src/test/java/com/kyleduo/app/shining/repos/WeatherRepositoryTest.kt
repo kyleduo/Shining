@@ -52,7 +52,7 @@ internal class WeatherRepositoryTest {
 
     @Test
     fun `When cache found Then do not perform http request`() = runBlockingTest {
-        every { memCache.get<Any>(any()) }.returns(Weather(updateTime = Date()))
+        enableCache()
 
         weatherRepository.queryWeather("1")
 
@@ -61,11 +61,16 @@ internal class WeatherRepositoryTest {
 
     @Test
     fun `When cache found Then return cached value`() = runBlockingTest {
-        val weather = Weather(updateTime = Date())
-        every { memCache.get<Any>(any()) }.returns(weather)
+        val weather = enableCache()
 
         val ret = weatherRepository.queryWeather("1")
 
         assertThat(ret).isSameInstanceAs(weather)
+    }
+
+    private fun enableCache(): Weather {
+        val weather = Weather(updateTime = Date())
+        every { memCache.get<Any>(any()) }.returns(weather)
+        return weather
     }
 }
