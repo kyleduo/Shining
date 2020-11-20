@@ -1,18 +1,14 @@
 package com.kyleduo.app.shining.repos
 
-import com.google.common.truth.Truth.assertThat
 import com.kyleduo.app.shining.api.WeatherApi
 import com.kyleduo.app.shining.datastore.MemCache
 import com.kyleduo.app.shining.model.Weather
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
+import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
-import org.junit.Test
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.lifecycle.CachingMode
+import org.spekframework.spek2.style.specification.describe
 import java.util.*
 
 
@@ -20,52 +16,73 @@ import java.util.*
  * @author zhangduo on 2020/11/17
  */
 @ExperimentalCoroutinesApi
-internal class WeatherRepositoryTest {
+object WeatherRepositoryTest : Spek({
 
-    @MockK(relaxed = true)
-    private lateinit var weatherService: WeatherApi.WeatherService
+    val weatherService: WeatherApi.WeatherService = mockk(relaxed = true)
+    val memCache: MemCache = mockk(relaxed = true)
 
-    @MockK(relaxed = true)
-    private lateinit var memCache: MemCache
+    lateinit var weatherRepository: WeatherRepository
 
-    private lateinit var weatherRepository: WeatherRepository
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-
+    beforeEachGroup {
         weatherRepository = WeatherRepository(
             weatherService, memCache
         )
+    }
 
+    beforeEachTest {
+        clearMocks(weatherService)
         coEvery { weatherService.queryWeather(any()) }.returns(null)
     }
 
-    @Test
-    fun `When no cache Then query through weather service`() = runBlockingTest {
-        every { memCache.get<Any>(any()) }.returns(null)
+    group("when no cache") {
 
-        weatherRepository.queryWeather("1")
+        beforeEachTest {
+            every { memCache.get<Any>(any()) }.returns(null)
+        }
 
-        coVerify { weatherService.queryWeather("1") }
+        describe("query weather") {
+
+            beforeEachTest {
+                runBlockingTest {
+                    weatherRepository.queryWeather("1")
+                }
+            }
+
+            it("should request through weather service") {
+                runBlockingTest {
+                    coVerify { weatherService.queryWeather("1") }
+                }
+            }
+        }
     }
 
-    @Test
-    fun `When cache found Then do not perform http request`() = runBlockingTest {
-        every { memCache.get<Any>(any()) }.returns(Weather(updateTime = Date()))
+    group("when has cache") {
+        val weather: Weather by memoized(mode = CachingMode.EACH_GROUP) { Weather(updateTime = Date()) }
 
-        weatherRepository.queryWeather("1")
+        beforeEachTest {
+            every { memCache.get<Any>(any()) }.returns(weather)
+        }
 
-        coVerify(exactly = 0) { weatherService.queryWeather(any()) }
+        describe("query weather") {
+            // 这里不能直接写调用
+
+            lateinit var ret: Weather
+
+            beforeEachTest {
+                runBlockingTest {
+                    ret = weatherRepository.queryWeather("1") as Weather
+                }
+            }
+
+            it("should not perform web request") {
+                runBlockingTest {
+                    coVerify(exactly = 0) { weatherService.queryWeather(any()) }
+                }
+            }
+
+            it("should use cache") {
+                assert(ret === weather)
+            }
+        }
     }
-
-    @Test
-    fun `When cache found Then return cached value`() = runBlockingTest {
-        val weather = Weather(updateTime = Date())
-        every { memCache.get<Any>(any()) }.returns(weather)
-
-        val ret = weatherRepository.queryWeather("1")
-
-        assertThat(ret).isSameInstanceAs(weather)
-    }
-}
+})

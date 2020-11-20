@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: "de.mannodermaus.android-junit5"
 
 def CONF_API_APP_ID = "api.appId"
 def CONF_API_APP_SECRET = "api.appSecret"
@@ -9,6 +10,10 @@ def CONF_API_APP_SECRET = "api.appSecret"
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+
+    sourceSets.each {
+        it.java.srcDirs += "src/$it.name/kotlin"
+    }
 
     Properties localProperties = getLocalProperties()
 
@@ -42,7 +47,22 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true
+        junitPlatform {
+            filters {
+                engines {
+                    include 'spek2'
+                }
+            }
+            jacocoOptions {
+                // here goes all jacoco config, for example
+                html.enabled = true
+                xml.enabled = false
+                csv.enabled = false
+            }
+        }
+        unitTests.all {
+            testLogging.events = ["passed", "skipped", "failed"]
+        }
     }
 }
 
@@ -59,6 +79,7 @@ ext {
     lifecycle_version = "2.2.0"
     activity_version = "1.1.0"
     fragment_version = "1.2.0"
+    spek_version = "2.0.14"
 }
 
 dependencies {
@@ -95,4 +116,12 @@ dependencies {
     testImplementation "io.mockk:mockk:1.10.2"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation "com.google.truth:truth:1.1"
+
+
+    // spek
+    testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spek_version"
+    testImplementation "org.spekframework.spek2:spek-runner-junit5:$spek_version"
+
+    // spek requires kotlin-reflect, omit when already in classpath
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
